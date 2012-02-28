@@ -1,0 +1,18 @@
+Some things to be aware of:
+
+1] This code was all produced and tested on a debian based linux distribution. 
+If you have any rpoblems running it please let me know and I can arrange to demo 
+it for you on this platform. I assume the code will compile under Mac OS since 
+they both use the POSIX environment
+
+2] Some issue with the graphical runtime on this linux machine keeps giving me an 
+intermittant segmentation fault
+
+"Feb 27 18:20:58 Iridium kernel: [ 3108.914945] ChatAppGNUstep[3803]: 
+segfault at 968 ip 00007ffe31ded6ca sp 00007ffe2e2d9960 error 4 in 
+libX11.so.6.3.0[7ffe31dc3000+133000]"
+
+I have been unable to correct the issue and assume it is due to the gnustep runtime on this machine?
+
+3] The server operates on port 8550 by default
+

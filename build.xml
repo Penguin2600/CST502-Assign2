@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<project name="Cst502 Sample Chat client."
+         default="targets" basedir="."
+         xmlns:dn="antlib:org.apache.ant.dotnet"
+         xmlns:ac="antlib:net.sf.antcontrib"
+         xmlns="antlib:org.apache.tools.ant"
+         xmlns:cpptasks="antlib:net.sf.antcontrib.cpptasks">
+
+   <property name="src.dir" value="src"/>
+   <property name="dist.dir" value="obj"/>
+   <property name="lib.dir" value="lib"/>
+   <property name="build" value="classes"/>
+   <property name="program" value="SampleClient"/>
+   <property environment="env"/>
+   <property name="user" value="${env.USERNAME}"/>
+
+   <target name="targets">
+      <echo message="Targets are clean, prepare, build, executeJavaClient, executeJavaServer, execduteObjCClient, and targets"/>
+      <echo message="os is: ${os.name}"/>
+   </target>
+
+   <path id="compile.classpath">
+      <pathelement location="${build}"/>
+      <pathelement location="${lib.dir}/ChatClientGui.jar"/>
+   </path>
+
+   <target name="prepare">
+      <mkdir dir="${dist.dir}" />
+      <mkdir dir="${build}" />
+   </target>
+
+   <target name="clean">
+      <delete file="${dist.dir}/SampleChatClient.exe" failonerror="false"/>
+      <delete dir="${build}" failonerror="false"/>
+      <delete dir="${dist.dir}" failonerror="false"/>
+      <delete dir="ChatApp.app" failonerror="false"/>
+      <delete dir="ChatAppGNUstep.app" failonerror="false"/>
+   </target>
+
+   <target name="build" depends="prepare">
+      <javac srcdir="${src.dir}/java"
+             includeantruntime="false"
+             destdir="${build}">
+         <classpath refid="compile.classpath"/>
+      </javac>
+      <ac:if>
+        <ac:os family="unix"/>
+        <ac:then>
+          <exec executable="make"/>
+        </ac:then>
+        <ac:else>
+          <exec executable="./samplexcruncmd"/>
+        </ac:else>
+      </ac:if>
+   </target>
+
+   <target name="executeJavaClient" depends="build">
+         <java classname="ChatClient" fork="yes">
+           <classpath refid="compile.classpath"/>
+         </java>
+   </target>
+
+   <target name="executeJavaServer" depends="build">
+         <java classname="ChatServer" fork="yes">
+           <classpath refid="compile.classpath"/>
+         </java>
+   </target>
+
+
+   <target name="executeObjCClient" depends="build">
+      <ac:if>
+        <ac:os family="unix"/>
+        <ac:then>
+          <exec executable="ChatAppGNUstep.app/ChatAppGNUstep">
+          <arg value="objCUser"/>
+          </exec>
+        </ac:then>
+        <ac:else>
+          <exec executable="./ChatApp.app/Contents/MacOS/ChatApp">
+          <arg value="objCUser"/>
+          </exec>
+        </ac:else>
+      </ac:if>
+   </target>
+
+</project>
